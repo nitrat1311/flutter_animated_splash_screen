@@ -10,7 +10,6 @@ Future<void> _createAndroidSplash({
     _updategradleFile(File(_androidGradleFile));
     await _createSplashViewTemplate();
     await _saveJsonFile(jsonPath);
-    await deletingAndroidMenifest();
     await _deletingAndroidStyleTheme();
   }
 
@@ -75,8 +74,6 @@ Future _modifyManifestFolder() async {
       final individualPattern = patternName.trim().split('"').join('.');
       print('[Android] Getting package name');
       final finalPattern = individualPattern.trim().split('.');
-      print('[Android] Creating a new manifest Folder');
-      createAndroidManifest(finalPattern);
       print('[Android] Creating a new Style Theme file');
       _createStyleTheme();
       print('[Android] Creating splash view');
@@ -135,16 +132,7 @@ void createMainActivityKitFile(finalPattern) {
 //       '${finalPattern[1]}.${finalPattern[2]}.${finalPattern[3]}'));
 // }
 
-/// Deleting the Manifest File
-///
-/// This Function is  use for deleting the Manifest file
-/// Sometimes file to give permssion in modifying the manifest folder.
-/// Therefore it will be a good option to delete it
-Future<void> deletingAndroidMenifest() async {
-  final androidManifest = File(_androidManifestFile);
-  print('[Android] Deleting the android manifest file');
-  await androidManifest.writeAsString('');
-}
+
 
 /// Deleting the Andriod Style File
 ///
@@ -167,22 +155,4 @@ void _createStyleTheme() {
   androidStyleTheme.createSync(recursive: true);
   print('[Android] Creating a new manifest file');
   androidStyleTheme.writeAsString(_androidStyle, mode: FileMode.write);
-}
-
-/// Creating a new maifest File
-///
-/// This Function is  use for creating a new Manifest file
-/// Sometimes file to give permssion in modifying the manifest folder.
-/// Therefore it will be a good option to delete it
-void createAndroidManifest(domain) {
-  final androidManifest = File(_androidManifestFile);
-  androidManifest.createSync(recursive: true);
-  print('[Android] Creating a new manifest file');
-  androidManifest.writeAsString(
-      _androidNewMainMinfest(
-        '${domain[1]}.${domain[2]}.${domain[3]}',
-        '${domain[3]}',
-      ),
-      mode: FileMode.write);
-  _projectName = '${domain[3]}';
 }
